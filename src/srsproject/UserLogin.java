@@ -10,6 +10,7 @@ package srsproject;
  * @author MJV Merida
  */
 
+import java.sql.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
@@ -95,6 +96,7 @@ public class UserLogin extends JFrame implements ActionListener {
 
         // frame visible
         frame.setVisible(true);
+        button1.addActionListener(this);
     }
 
     @Override
@@ -106,26 +108,42 @@ public class UserLogin extends JFrame implements ActionListener {
                 password.setEchoChar('•');
             }
         } else if (e.getSource() == button1) {
-            handleLogin();
-        }
-    }
+            String emailtxt = email.getText();
+            String passwordtxt = new String(password.getPassword());
 
-    private void handleLogin() {
-        String emailtxt = email.getText();
-        String passwordtxt = new String(password.getPassword());
+            if (emailtxt.isEmpty() || passwordtxt.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "Please enter your both Email and Password.", "Login Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                String dbUrl = "jdbc:mysql://localhost:3306/user_login";
+                String dbUser = "root";
+                String dbPassword = "rootmjv_root16";
 
-        if (emailtxt.isEmpty() || passwordtxt.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "Please enter both Email and Password.", "Login Error", JOptionPane.ERROR_MESSAGE);
-        } else {
+                try (Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword)) {
+                    String query = "SELECT * FROM login WHERE user_email = ? AND user_password = ?";
+                    PreparedStatement preparedStatement = conn.prepareStatement(query);
+                    preparedStatement.setString(1, emailtxt);
+                    preparedStatement.setString(2, passwordtxt);
+                    
+                    ResultSet result = preparedStatement.executeQuery();
+                    
+                    if(result.next()){                      
+                        JOptionPane.showMessageDialog(frame, "Login successful!", "Login", JOptionPane.INFORMATION_MESSAGE);
+                        frame.dispose();
+                        Dashboard db = new Dashboard();
+                        db.setVisible(true);
+                    } else{
+                        JOptionPane.showMessageDialog(frame, "Invalid Email or Password.", "Login Error", JOptionPane.ERROR_MESSAGE);
+                    }
+
+
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(frame, "Database connection error: " + ex.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+                }
+
             
-            JOptionPane.showMessageDialog(frame, "Login successful!", "Login", JOptionPane.INFORMATION_MESSAGE);
-
-            
-            
-
-            frame.dispose();
-            Dashboard db = new Dashboard();
-            db.setVisible(true);  
+                
+            }
         }
     }
 
