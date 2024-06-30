@@ -1,20 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package srsproject;
+
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.ImageIcon;
 
-/**
- *
- * @author lykamaesebelina
- */
 
-    
 
 public class Dashboard extends JFrame implements ActionListener {
         JFrame frame;
@@ -128,15 +120,22 @@ public class Dashboard extends JFrame implements ActionListener {
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        JButton source = (JButton) e.getSource();
-        JOptionPane.showMessageDialog(this, source.getText() + " clicked");
+        
+        
+        if(e.getSource()== logoutButton){
+        UserLogin ul = new UserLogin();
+        ul.setVisible(true);
+    }
+      
+        else if(e.getSource()== button3){
+        AttendanceRecord ar = new AttendanceRecord();
+        ar.setVisible(true);
     }
 
-   
+        else if(e.getSource()== button1){
+        StudentInformation si = new StudentInformation();
+        si.setVisible(true);
+    }
 
-
-
-        public static void main(String[] args) {
-        new Dashboard();
 }
 }
