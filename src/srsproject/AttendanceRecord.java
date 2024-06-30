@@ -36,9 +36,8 @@ public class AttendanceRecord extends JFrame implements ActionListener {
         attendanceFrame = new JFrame();
         attendanceFrame.setTitle("Student Attendance");
         attendanceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        attendanceFrame.setPreferredSize(new Dimension(1500, 1000));
-        attendanceFrame.setLayout(null);
-        attendanceFrame.setLocationRelativeTo(null);
+        attendanceFrame.setSize(1500, 1000);
+        
   
         try {
             
@@ -60,7 +59,7 @@ public class AttendanceRecord extends JFrame implements ActionListener {
         headerPanel.setBackground(new Color(128, 0, 0));   
         headerPanel.setBounds(0, 0, 1500, 100);
         
-        headerLabel = new JLabel("BSIT STUDENT RECORD SYSTEM");
+        headerLabel = new JLabel("BSIT STUDENT ATTENDANCE TABLE");
         headerLabel.setPreferredSize(new Dimension(720, 100)); 
         headerLabel.setForeground(Color.WHITE);
         headerLabel.setFont(new Font("Arial", Font.BOLD, 38));
