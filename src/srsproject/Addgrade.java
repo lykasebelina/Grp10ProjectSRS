@@ -11,7 +11,11 @@ import java.sql.*;
 public class Addgrade implements ActionListener {
     JTextField txtname, txtcomp090, txtcomp010, txtcomp012, txtcomp013, txtcomp014, txtelec, txtinte, txtpathfit;
     JButton btnSave, btnReturn;
-    JPanel headerPanel;
+    ImageIcon bckgrndPic, bckgrnd;
+    Image backgroundPic;
+    JLabel background;
+    JPanel headerPanel, panelBG;
+    
 
     private static final String dbURL = "jdbc:mysql://localhost:3306/user_login";
     private static final String dbUser = "root";
@@ -32,7 +36,7 @@ public class Addgrade implements ActionListener {
         headerPanel.setBounds(0, 0, 1500, 100);
         
         
-        JLabel lblHeader = new JLabel("STUDENT MANAGEMENT SYSTEM");
+        JLabel lblHeader = new JLabel("BSIT STUDENT RECORD SYSTEM");
         lblHeader.setBounds(400, 30, 700, 50);
         lblHeader.setFont(new Font("Arial", Font.BOLD, 38));
         lblHeader.setForeground(Color.WHITE);
@@ -141,11 +145,20 @@ public class Addgrade implements ActionListener {
         grades.setLayout(null);
         grades.setVisible(true);
         
-        JLabel background = new JLabel();
-        ImageIcon bckgrndPic = new ImageIcon("folderimage/sbBinan.jpg");
-        background.setIcon(bckgrndPic);
-        background.setSize(1500, 1000);
-        grades.add(background);
+        bckgrndPic = new ImageIcon("folderimage/sbBinan.jpg");
+        backgroundPic = bckgrndPic.getImage().getScaledInstance(1500, 1000, Image.SCALE_SMOOTH);
+        bckgrnd = new ImageIcon(backgroundPic);
+       
+        background = new JLabel(bckgrnd);
+        
+        panelBG = new JPanel();
+        panelBG.setBounds(0,-10,1500,1000);
+        panelBG.add(background);
+        
+        grades.add(panelBG);
+        
+        
+        
         
     }
     @Override
@@ -208,4 +221,5 @@ public class Addgrade implements ActionListener {
             }
         }
     } 
+  
 }

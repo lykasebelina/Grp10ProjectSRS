@@ -16,6 +16,10 @@ public class Tablegrade implements ActionListener {
     private JButton btnReturn, btnEdit, btnAdd, btnDelete;
     private JTable table;
     private DefaultTableModel tableModel;
+    private ImageIcon bckgrndPic, bckgrnd;
+    private Image backgroundPic;
+    private JLabel background;
+    private JPanel panelBG;
 
     private static final String dbURL = "jdbc:mysql://localhost:3306/user_login";
     private static final String dbUser = "root";
@@ -73,10 +77,17 @@ public class Tablegrade implements ActionListener {
         btnDelete.setForeground(new Color(128, 0, 0));
         btnDelete.addActionListener(this);
 
-        JLabel background = new JLabel();
-        ImageIcon bckgrndPic = new ImageIcon("folderimage/sbBinan.jpg");
-        background.setIcon(bckgrndPic);
-        background.setSize(1500, 1000);
+        bckgrndPic = new ImageIcon("folderimage/sbBinan.jpg");
+        backgroundPic = bckgrndPic.getImage().getScaledInstance(1500, 1000, Image.SCALE_SMOOTH);
+        bckgrnd = new ImageIcon(backgroundPic);
+       
+        background = new JLabel(bckgrnd);
+        
+        panelBG = new JPanel();
+        panelBG.setBounds(0,-10,1500,1000);
+        panelBG.add(background);
+        
+        
 
         tblGrades.add(btnReturn);
         tblGrades.add(btnAdd);
@@ -84,7 +95,7 @@ public class Tablegrade implements ActionListener {
         tblGrades.add(scrollPane);
         tblGrades.add(lblHeader);
         tblGrades.add(headerPanel);
-        tblGrades.add(background);
+        tblGrades.add(panelBG);
         tblGrades.setVisible(true);
     }
 
@@ -160,5 +171,8 @@ public class Tablegrade implements ActionListener {
         }
     }
 
-    
+    public static void main(String[] args) {
+     new Tablegrade();
+ }
+
 }
