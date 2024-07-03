@@ -253,8 +253,8 @@ public class StudentInformation implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backButton) {
-            studentInformationFrame.dispose(); // Close the current frame
-            Dashboard db = new Dashboard(); // Create a new Dashboard frame
+            studentInformationFrame.dispose(); 
+            Dashboard db = new Dashboard();
         } else if (e.getSource() == addButton) {
             addRow();
         } else if (e.getSource() == deleteButton) {
