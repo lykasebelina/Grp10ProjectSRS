@@ -4,14 +4,14 @@ import java.awt.event.*;
 import java.awt.*;
 import java.sql.*;
 
-public class Addgrades implements ActionListener {
+public class Addgrades extends JFrame implements ActionListener {
     JTextField txtname, txtcomp090, txtcomp010, txtcomp012, txtcomp013, txtcomp014, txtelec, txtinte, txtpathfit;
     JButton btnSave, btnReturn;
     JPanel headerPanel;
 
-    private static final String dbURL = "jdbc:mysql://localhost:3306/records";
+    private static final String dbURL = "jdbc:mysql://localhost:3306/user_login";
     private static final String dbUser = "root";
-    private static final String dbPass = "sqllewol123";
+    private static final String dbPass = "rootmjv_root16";
     
     Addgrades(){
 

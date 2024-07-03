@@ -7,7 +7,7 @@ import javax.swing.border.*;
 import java.sql.*;
 import java.util.*;
 
-public class Tblgrades extends JFrame implements ActionListener {
+public class Tablegrade extends JFrame implements ActionListener {
     JButton btnReturn, btnEdit, btnAdd, btnDelete;
     JFrame tblGrades;
     JTable table;
@@ -21,7 +21,7 @@ public class Tblgrades extends JFrame implements ActionListener {
     private static final String dbUser = "root";
     private static final String dbPass = "rootmjv_root16";
     
-    Tblgrades(){
+    Tablegrade(){
         tblGrades  = new JFrame();        
         tblGrades.setSize(1500, 1000);
         tblGrades.setTitle("Grades");

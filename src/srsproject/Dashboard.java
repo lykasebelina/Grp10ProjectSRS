@@ -126,16 +126,26 @@ public class Dashboard extends JFrame implements ActionListener {
         UserLogin ul = new UserLogin();
         ul.setVisible(true);
     }
+         else if(e.getSource()== button1){
+        StudentInformation si = new StudentInformation();
+        si.setVisible(true);
+    }
+        
+        else if(e.getSource()== button2){
+        Tablegrade tb = new Tablegrade();
+        tb.setVisible(true);
+        
+    }
       
         else if(e.getSource()== button3){
         AttendanceRecord ar = new AttendanceRecord();
         ar.setVisible(true);
     }
 
-        else if(e.getSource()== button1){
-        StudentInformation si = new StudentInformation();
-        si.setVisible(true);
-    }
+       
+        
+        
+
 
 }
 }
