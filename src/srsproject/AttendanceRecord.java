@@ -201,7 +201,7 @@ public class AttendanceRecord implements ActionListener {
         }else if (e.getSource() == deleteButton) {
             deleteRecord();
         }else if (e.getSource() == backButton) {
-            attendanceFrame.dispose();
+            new Dashboard();
         }
     }
     

@@ -1,14 +1,15 @@
+package srsproject;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package srsproject;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.sql.*;
 
 public class Addgrade implements ActionListener {
+    JFrame grades;
     JTextField txtname, txtcomp090, txtcomp010, txtcomp012, txtcomp013, txtcomp014, txtelec, txtinte, txtpathfit;
     JButton btnSave, btnReturn;
     ImageIcon bckgrndPic, bckgrnd;
@@ -145,7 +146,7 @@ public class Addgrade implements ActionListener {
         grades.setLayout(null);
         grades.setVisible(true);
         
-        bckgrndPic = new ImageIcon("folderimage/sbBinan.jpg");
+        
         backgroundPic = bckgrndPic.getImage().getScaledInstance(1500, 1000, Image.SCALE_SMOOTH);
         bckgrnd = new ImageIcon(backgroundPic);
        
@@ -164,6 +165,7 @@ public class Addgrade implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e){
         if(e.getSource() == btnReturn){
+            grades.dispose();
             Tablegrade tbl = new Tablegrade();
         }
         

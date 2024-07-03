@@ -11,7 +11,7 @@ public class UserLoginMain {
             
             public void run() {
            UserLogin ul = new UserLogin();
-           ul.setVisible(true);
+           
     }
         });
         
