@@ -120,30 +120,24 @@ public class Dashboard implements ActionListener {
     
     @Override
     public void actionPerformed(ActionEvent e) {
-      
-        if(e.getSource()== logoutButton){
-        frame.dispose();
-        UserLogin ul = new UserLogin();
-        //ul.setVisible(true);
+        if (e.getSource() == logoutButton) {
+            frame.dispose(); 
+            UserLogin ul = new UserLogin();
+            
+        } else if (e.getSource() == button1) {
+            frame.dispose(); 
+            StudentInformation si = new StudentInformation();
+            
+        } else if (e.getSource() == button2) {
+            frame.dispose(); 
+            Tablegrade tb = new Tablegrade();
+            
+        } else if (e.getSource() == button3) {
+            frame.dispose(); 
+            AttendanceRecord ar = new AttendanceRecord();
+            
+        }
     }
-        else if(e.getSource()== button1){
-        frame.dispose();
-        StudentInformation si = new StudentInformation();
-        si.setVisible(true);
-    }
-        else if(e.getSource()== button2){
-        frame.dispose();
-        Tablegrade tb = new Tablegrade();
-        tb.setVisible(true);
-        
-    }
-      
-        else if(e.getSource()== button3){
-        frame.dispose();
-        AttendanceRecord ar = new AttendanceRecord();
-//        ar.setVisible(true);
-    }
-        
 
        
         
@@ -152,6 +146,3 @@ public class Dashboard implements ActionListener {
 
 }
 
-
-   
-}

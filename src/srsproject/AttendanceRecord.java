@@ -1,21 +1,20 @@
 package srsproject;
 
-import java.sql.*;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.table.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 public class AttendanceRecord implements ActionListener {
 
     JFrame attendanceFrame;
-    Image background;
-    ImageIcon bckgrnd, bgImage;
     JPanel headerPanel, panelBG, searchPanel;
-    JLabel headerLabel, imageLabel, searchLabel;
+    JLabel headerLabel, searchLabel, imageLabel;
     JTable table;
     Color tableBorderColor;
     JTableHeader tableHeader;
@@ -27,7 +26,7 @@ public class AttendanceRecord implements ActionListener {
     Connection conn;
     String dbUrl = "jdbc:mysql://localhost:3306/user_login";
     String dbUser = "root";
-    String dbPassword ="rootmjv_root16";
+    String dbPassword = "rootmjv_root16";
 
     public AttendanceRecord() {
         attendanceFrame = new JFrame();
@@ -49,7 +48,7 @@ public class AttendanceRecord implements ActionListener {
         model = new DefaultTableModel(new Object[]{"Name", "Course", "Subject", "Date", "Attendance"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return true; 
+                return true;
             }
         };
 
@@ -71,7 +70,7 @@ public class AttendanceRecord implements ActionListener {
         searchBar = new JTextField(20);
         searchLabel = new JLabel("Search:");
         searchLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        
+
         searchPanel = new JPanel(new BorderLayout());
         searchPanel.add(searchLabel, BorderLayout.WEST);
         searchPanel.add(searchBar, BorderLayout.CENTER);
@@ -149,9 +148,9 @@ public class AttendanceRecord implements ActionListener {
         backButton.setBounds(1180, 720, 200, 50);
         backButton.addActionListener(this);
 
-        bgImage = new ImageIcon("folderimage/sbBinan.jpg");
-        background = bgImage.getImage().getScaledInstance(1500, 1000, Image.SCALE_SMOOTH);
-        bckgrnd = new ImageIcon(background);
+        ImageIcon bgImage = new ImageIcon("folderimage/sbBinan.jpg");
+        Image background = bgImage.getImage().getScaledInstance(1500, 1000, Image.SCALE_SMOOTH);
+        ImageIcon bckgrnd = new ImageIcon(background);
 
         imageLabel = new JLabel(bckgrnd);
 
@@ -186,11 +185,11 @@ public class AttendanceRecord implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == createButton) {
+        if (e.getSource() == createButton) {
             new AttendanceRecord();
-        } else if(e.getSource() == addButton) {
-            addRow(); 
-        } else if(e.getSource() == submitButton) {
+        } else if (e.getSource() == addButton) {
+            addRow();
+        } else if (e.getSource() == submitButton) {
             if (checkEmptyFields()) {
                 JOptionPane.showMessageDialog(attendanceFrame, "Please complete all fields before saving.", "Unable to Submit Record", JOptionPane.WARNING_MESSAGE);
             } else {
@@ -210,11 +209,12 @@ public class AttendanceRecord implements ActionListener {
         } else if (e.getSource() == viewButton) {
             viewRecords();
         } else if (e.getSource() == editButton) {
-            // Edit logic here
+           
         } else if (e.getSource() == updateButton) {
-            // Update logic here
+           
         } else if (e.getSource() == backButton) {
-            attendanceFrame.dispose();
+            attendanceFrame.dispose(); 
+            new Dashboard(); 
         }
     }
 
@@ -222,7 +222,7 @@ public class AttendanceRecord implements ActionListener {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String currentDate = sdf.format(new Date());
         model.addRow(new Object[]{"", "", "", currentDate, ""});
-    } 
+    }
 
     private boolean checkEmptyFields() {
         int rowCount = model.getRowCount();
@@ -277,15 +277,15 @@ public class AttendanceRecord implements ActionListener {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 model.addRow(new Object[]{
-                    rs.getString("name"),
-                    rs.getString("course"),
-                    rs.getString("subject"),
-                    rs.getString("date"),
-                    rs.getString("attendance"),
+                        rs.getString("name"),
+                        rs.getString("course"),
+                        rs.getString("subject"),
+                        rs.getString("date"),
+                        rs.getString("attendance"),
                 });
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -323,7 +323,5 @@ public class AttendanceRecord implements ActionListener {
         }
     }
 
-    void setVisible(boolean b) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    
 }

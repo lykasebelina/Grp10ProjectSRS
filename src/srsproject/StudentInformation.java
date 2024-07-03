@@ -7,41 +7,46 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.*;
 
-public class StudentInformation extends JFrame implements ActionListener {
-    JFrame StudentInformationFrame;
-    JPanel headerPanel;
-    JLabel headerLabel;
-    JTable table;
-    Color tableBorderColor;
-    JTableHeader tableHeader;
-    JScrollPane scrollPane;
-    DefaultTableModel model;
-    JButton addButton;
-    JButton deleteButton;
-    JButton backButton;
-    JButton viewButton;
-    JButton submitButton;
-    JTextField searchBar;
-    ImageIcon bg;
-    Image imageSize;
-    ImageIcon backgroundImage;
-    JPanel panelImage;
-    JLabel imageLabel;
+public class StudentInformation implements ActionListener {
+    private JFrame studentInformationFrame;
+    private JPanel headerPanel;
+    private JLabel headerLabel;
+    private JTable table;
+    private Color tableBorderColor;
+    private JTableHeader tableHeader;
+    private JScrollPane scrollPane;
+    private DefaultTableModel model;
+    private JButton addButton;
+    private JButton deleteButton;
+    private JButton backButton;
+    private JButton viewButton;
+    private JButton submitButton;
+    private JTextField searchBar;
+    private ImageIcon bg;
+    private Image imageSize;
+    private ImageIcon backgroundImage;
+    private JPanel panelImage;
+    private JLabel imageLabel;
 
-    Connection conn;
-    String dbUrl = "jdbc:mysql://localhost:3306/user_login";
-    String dbUser = "root";
-    String dbPassword = "rootmjv_root16";
+    private Connection conn;
+    private String dbUrl = "jdbc:mysql://localhost:3306/user_login";
+    private String dbUser = "root";
+    private String dbPassword = "rootmjv_root16";
 
     public StudentInformation() {
-        StudentInformationFrame = new JFrame();
-        StudentInformationFrame.setTitle("Student Information");
-        StudentInformationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        StudentInformationFrame.setSize(1500, 1000);
-        
-        
-        
+        studentInformationFrame = new JFrame();
+        studentInformationFrame.setTitle("Student Information");
+        studentInformationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        studentInformationFrame.setSize(1500, 1000);
 
+        initializeComponents();
+        connectToDatabase();
+        loadData();
+
+        studentInformationFrame.setVisible(true);
+    }
+
+    private void initializeComponents() {
         headerPanel = new JPanel();
         headerPanel.setBackground(new Color(128, 0, 0));
         headerPanel.setBounds(0, 0, 1500, 100);
@@ -76,7 +81,6 @@ public class StudentInformation extends JFrame implements ActionListener {
         searchBar = new JTextField(20);
         searchBar.addActionListener(this);
         searchBar.setBounds(50, 120, 300, 30);
-        
 
         addButton = new JButton("Add Row");
         addButton.setFont(new Font("Arial Black", Font.BOLD, 13));
@@ -133,22 +137,17 @@ public class StudentInformation extends JFrame implements ActionListener {
         panelImage.setSize(1500, 1000);
         panelImage.add(imageLabel);
 
-        StudentInformationFrame.add(scrollPane);
-        StudentInformationFrame.add(headerPanel);
-        StudentInformationFrame.add(addButton);
-        StudentInformationFrame.add(deleteButton);
-        StudentInformationFrame.add(backButton);
-        StudentInformationFrame.add(viewButton);
-        StudentInformationFrame.add(submitButton);
-        StudentInformationFrame.add(searchBar);
-        StudentInformationFrame.add(panelImage);
+        studentInformationFrame.add(scrollPane);
+        studentInformationFrame.add(headerPanel);
+        studentInformationFrame.add(addButton);
+        studentInformationFrame.add(deleteButton);
+        studentInformationFrame.add(backButton);
+        studentInformationFrame.add(viewButton);
+        studentInformationFrame.add(submitButton);
+        studentInformationFrame.add(searchBar);
+        studentInformationFrame.add(panelImage);
 
-        StudentInformationFrame.pack();
-        StudentInformationFrame.setVisible(true);
-
-
-        connectToDatabase();
-        loadData();
+        studentInformationFrame.setLayout(null);
     }
 
     private void connectToDatabase() {
@@ -156,7 +155,7 @@ public class StudentInformation extends JFrame implements ActionListener {
             conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Failed to connect to database", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(studentInformationFrame, "Failed to connect to database", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -249,37 +248,33 @@ public class StudentInformation extends JFrame implements ActionListener {
             String email = (String) model.getValueAt(i, 6);
             addRowToDatabase(student_id, name, course, age, gender, contactNumber, email);
         }
-        JOptionPane.showMessageDialog(this, "Data submitted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == addButton) {
+        if (e.getSource() == backButton) {
+            studentInformationFrame.dispose(); // Close the current frame
+            Dashboard db = new Dashboard(); // Create a new Dashboard frame
+        } else if (e.getSource() == addButton) {
             addRow();
         } else if (e.getSource() == deleteButton) {
             int selectedRow = table.getSelectedRow();
-            if (selectedRow >= 0) {
-                int confirmation = JOptionPane.showConfirmDialog(this, "Do you want to delete this record?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
-                if (confirmation == JOptionPane.YES_OPTION) {
-                    String studentId = (String) table.getValueAt(selectedRow, 0);
-                    deleteRowFromDatabase(studentId);
-                    model.removeRow(selectedRow);
-                }
+            if (selectedRow != -1) {
+                String studentId = (String) model.getValueAt(selectedRow, 0);
+                deleteRowFromDatabase(studentId);
+                model.removeRow(selectedRow);
             } else {
-                JOptionPane.showMessageDialog(this, "Please select a record to delete", "No Record Selected", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(studentInformationFrame, "Select a row to delete", "Error", JOptionPane.ERROR_MESSAGE);
             }
-            } else if (e.getSource() == searchBar) {
-                String keyword = searchBar.getText();
-                searchInDatabase(keyword);
-            } else if (e.getSource() == viewButton) {
-                viewData();
-            } else if (e.getSource() == submitButton) {
-                submitData();
-            }
-        if(e.getSource() == backButton){
-           Dashboard db = new Dashboard();
-//           db.setVisible(true);
-       }
+        } else if (e.getSource() == viewButton) {
+            viewData();
+        } else if (e.getSource() == submitButton) {
+            submitData();
+            JOptionPane.showMessageDialog(studentInformationFrame, "Data submitted successfully");
+        } else if (e.getSource() == searchBar) {
+            String keyword = searchBar.getText().trim();
+            searchInDatabase(keyword);
+        }
     }
 
     
