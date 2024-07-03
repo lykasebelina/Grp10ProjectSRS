@@ -278,7 +278,7 @@ public class StudentInformation extends JFrame implements ActionListener {
             }
         if(e.getSource() == backButton){
            Dashboard db = new Dashboard();
-           db.setVisible(true);
+//           db.setVisible(true);
        }
     }
 

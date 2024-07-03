@@ -1,10 +1,14 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package srsproject;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.sql.*;
 
-public class Addgrades extends JFrame implements ActionListener {
+public class Addgrade implements ActionListener {
     JTextField txtname, txtcomp090, txtcomp010, txtcomp012, txtcomp013, txtcomp014, txtelec, txtinte, txtpathfit;
     JButton btnSave, btnReturn;
     JPanel headerPanel;
@@ -13,7 +17,7 @@ public class Addgrades extends JFrame implements ActionListener {
     private static final String dbUser = "root";
     private static final String dbPass = "rootmjv_root16";
     
-    Addgrades(){
+    Addgrade(){
 
         
         JFrame grades = new JFrame();
@@ -138,7 +142,7 @@ public class Addgrades extends JFrame implements ActionListener {
         grades.setVisible(true);
         
         JLabel background = new JLabel();
-        ImageIcon bckgrndPic = new ImageIcon("BACKGROUND2.jpg");
+        ImageIcon bckgrndPic = new ImageIcon("folderimage/sbBinan.jpg");
         background.setIcon(bckgrndPic);
         background.setSize(1500, 1000);
         grades.add(background);
@@ -147,7 +151,7 @@ public class Addgrades extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e){
         if(e.getSource() == btnReturn){
-            new Tblgrades();
+            Tablegrade tbl = new Tablegrade();
         }
         
         else if(e.getSource() == btnSave){
@@ -205,4 +209,3 @@ public class Addgrades extends JFrame implements ActionListener {
         }
     } 
 }
-

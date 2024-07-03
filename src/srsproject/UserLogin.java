@@ -15,7 +15,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
 
-public class UserLogin extends JFrame implements ActionListener {
+public class UserLogin implements ActionListener {
     JFrame frame;
     JPanel header;
     JLabel lemail, lpassword, linfo, lheader;
@@ -96,18 +96,23 @@ public class UserLogin extends JFrame implements ActionListener {
 
         // frame visible
         frame.setVisible(true);
-        button1.addActionListener(this);
+
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        
         if (e.getSource() == box) {
+           
             if (box.isSelected()) {
                 password.setEchoChar((char) 0);
             } else {
                 password.setEchoChar('•');
             }
-        } else if (e.getSource() == button1) {
+            
+       
+        } 
+        else if (e.getSource() == button1) {
             String emailtxt = email.getText();
             String passwordtxt = new String(password.getPassword());
 
@@ -126,12 +131,12 @@ public class UserLogin extends JFrame implements ActionListener {
                     
                     ResultSet result = preparedStatement.executeQuery();
                     
-                    if(result.next()){                      
+                    if(result.next()){  
                         JOptionPane.showMessageDialog(frame, "Login successful!", "Login", JOptionPane.INFORMATION_MESSAGE);
+                        Dashboard db = new Dashboard();         
                         frame.dispose();
-                        Dashboard db = new Dashboard();
-                        db.setVisible(true);
                     } else{
+                        
                         JOptionPane.showMessageDialog(frame, "Invalid Email or Password.", "Login Error", JOptionPane.ERROR_MESSAGE);
                     }
 

@@ -9,13 +9,13 @@ import java.util.Date;
 import javax.swing.border.LineBorder;
 import javax.swing.table.*;
 
-public class AttendanceRecord extends JFrame implements ActionListener {
+public class AttendanceRecord implements ActionListener {
 
     JFrame attendanceFrame;
     Image background;
     ImageIcon bckgrnd, bgImage;
     JPanel headerPanel, panelBG, searchPanel;
-    JLabel headerLabel, imageLabel;
+    JLabel headerLabel, imageLabel, searchLabel;
     JTable table;
     Color tableBorderColor;
     JTableHeader tableHeader;
@@ -34,8 +34,6 @@ public class AttendanceRecord extends JFrame implements ActionListener {
         attendanceFrame.setTitle("Student Attendance");
         attendanceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         attendanceFrame.setSize(1500, 1000);
-        
-        
 
         headerPanel = new JPanel();
         headerPanel.setBackground(new Color(128, 0, 0));
@@ -48,14 +46,12 @@ public class AttendanceRecord extends JFrame implements ActionListener {
         headerLabel.setForeground(new Color(245, 245, 220));
         headerPanel.add(headerLabel);
 
-                model = new DefaultTableModel(new Object[]{"Name", "Course", "Subject", "Date", "Attendance"}, 0) {
+        model = new DefaultTableModel(new Object[]{"Name", "Course", "Subject", "Date", "Attendance"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return true; 
             }
         };
-                
-         
 
         table = new JTable(model);
         table.setOpaque(false);
@@ -73,13 +69,14 @@ public class AttendanceRecord extends JFrame implements ActionListener {
         scrollPane.setBorder(new LineBorder(tableBorderColor, 8));
 
         searchBar = new JTextField(20);
+        searchLabel = new JLabel("Search:");
+        searchLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        
         searchPanel = new JPanel(new BorderLayout());
-        searchPanel.add(searchBar);
+        searchPanel.add(searchLabel, BorderLayout.WEST);
+        searchPanel.add(searchBar, BorderLayout.CENTER);
         searchPanel.setBounds(50, 120, 300, 30);
-        
-        
-   
-           
+
         createButton = new JButton("Create New Record");
         createButton.setFont(new Font("Arial Black", Font.BOLD, 13));
         createButton.setForeground(new Color(128, 0, 0));
@@ -88,9 +85,6 @@ public class AttendanceRecord extends JFrame implements ActionListener {
         createButton.setBorder(null);
         createButton.setBounds(50, 680, 200, 50);
         createButton.addActionListener(this);
-       
-        
-        
 
         addButton = new JButton("Add Row");
         addButton.setFont(new Font("Arial Black", Font.BOLD, 13));
@@ -127,7 +121,7 @@ public class AttendanceRecord extends JFrame implements ActionListener {
         viewButton.setBorder(null);
         viewButton.setBounds(710, 680, 200, 50);
         viewButton.addActionListener(this);
-        
+
         editButton = new JButton("Edit Records");
         editButton.setFont(new Font("Arial Black", Font.BOLD, 13));
         editButton.setForeground(new Color(128, 0, 0));
@@ -177,9 +171,8 @@ public class AttendanceRecord extends JFrame implements ActionListener {
         attendanceFrame.add(updateButton);
         attendanceFrame.add(backButton);
         attendanceFrame.add(panelBG);
-        
 
-        attendanceFrame.pack();
+        attendanceFrame.setLayout(null);
         attendanceFrame.setVisible(true);
 
         try {
@@ -191,59 +184,47 @@ public class AttendanceRecord extends JFrame implements ActionListener {
         }
     }
 
-  
-
-
     @Override
     public void actionPerformed(ActionEvent e) {
-        
         if(e.getSource() == createButton) {
-                
-               new AttendanceRecord();
-                
-        }else if(e.getSource() == addButton) {
-                addRow(); 
-        }else if(e.getSource() == submitButton) {
+            new AttendanceRecord();
+        } else if(e.getSource() == addButton) {
+            addRow(); 
+        } else if(e.getSource() == submitButton) {
             if (checkEmptyFields()) {
-                JOptionPane.showMessageDialog(this, "Please complete all fields before saving.", "Unable to Submit Record", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(attendanceFrame, "Please complete all fields before saving.", "Unable to Submit Record", JOptionPane.WARNING_MESSAGE);
             } else {
                 saveToDatabase();
             }
         } else if (e.getSource() == removeButton) {
             int selectedRow = table.getSelectedRow();
-            if (selectedRow != -1) { // Ensure a row is selected
+            if (selectedRow != -1) {
                 DefaultTableModel model = (DefaultTableModel) table.getModel();
                 model.removeRow(selectedRow);
             } else {
-                JOptionPane.showMessageDialog(this, "Please select a row to delete.", "No Row Selected", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(attendanceFrame, "Please select a row to delete.", "No Row Selected", JOptionPane.WARNING_MESSAGE);
             }
-        }
-        else if (e.getSource() == searchButton) {
-     
+        } else if (e.getSource() == searchButton) {
             String keyword = searchBar.getText();
-                searchRecord(keyword);
+            searchRecord(keyword);
         } else if (e.getSource() == viewButton) {
             viewRecords();
         } else if (e.getSource() == editButton) {
-            
+            // Edit logic here
         } else if (e.getSource() == updateButton) {
-            
-        }else if (e.getSource() == backButton) {
+            // Update logic here
+        } else if (e.getSource() == backButton) {
             attendanceFrame.dispose();
         }
     }
-    
-    
 
-private void addRow() {
-
+    private void addRow() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String currentDate = sdf.format(new Date());
         model.addRow(new Object[]{"", "", "", currentDate, ""});
     } 
 
-
-private boolean checkEmptyFields() {
+    private boolean checkEmptyFields() {
         int rowCount = model.getRowCount();
         for (int i = 0; i < rowCount; i++) {
             String name = (String) model.getValueAt(i, 0);
@@ -252,7 +233,7 @@ private boolean checkEmptyFields() {
             String attendance = (String) model.getValueAt(i, 4);
 
             if (name.isEmpty() || course.isEmpty() || subject.isEmpty() || attendance.isEmpty()) {
-                return true; // Return true if any required field is empty
+                return true;
             }
         }
         return false;
@@ -269,7 +250,7 @@ private boolean checkEmptyFields() {
                 String date = (String) model.getValueAt(i, 3);
                 String attendance = (String) model.getValueAt(i, 4);
 
-                if (!name.isEmpty() && !course.isEmpty() && !subject.isEmpty() && !attendance.isEmpty()) { // Only save rows with all required fields
+                if (!name.isEmpty() && !course.isEmpty() && !subject.isEmpty() && !attendance.isEmpty()) {
                     ps.setString(1, name);
                     ps.setString(2, course);
                     ps.setString(3, subject);
@@ -279,16 +260,15 @@ private boolean checkEmptyFields() {
                 }
             }
             ps.executeBatch();
-            JOptionPane.showMessageDialog(this, "Records saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(attendanceFrame, "Records saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             viewRecords();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Error saving records: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(attendanceFrame, "Error saving records: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
         }
     }
 
-
-      private void searchRecord(String keyword) {
+    private void searchRecord(String keyword) {
         model.setRowCount(0);
         String query = "SELECT * FROM attendance_record WHERE name LIKE ? OR student_id LIKE ?";
         try (PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -297,13 +277,11 @@ private boolean checkEmptyFields() {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 model.addRow(new Object[]{
-             
-                        rs.getString("name"),
-                        rs.getString("course"),
-                        rs.getString("subject"),
-                        rs.getString("date"),
-                        rs.getString("attendance"),
-                        
+                    rs.getString("name"),
+                    rs.getString("course"),
+                    rs.getString("subject"),
+                    rs.getString("date"),
+                    rs.getString("attendance"),
                 });
             }
         } catch (SQLException e) {
@@ -311,45 +289,41 @@ private boolean checkEmptyFields() {
         }
     }
 
+    private void viewRecords() {
+        try {
+            String query = "SELECT * FROM attendance_record ORDER BY date DESC, course ASC, name ASC";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
 
-   private void viewRecords() {
-    try {
-        String query = "SELECT * FROM attendance_record ORDER BY date DESC, course ASC, name ASC";
-        PreparedStatement ps = conn.prepareStatement(query);
-        ResultSet rs = ps.executeQuery();
+            DefaultTableModel newModel = new DefaultTableModel(new Object[]{"Name", "Course", "Subject", "Date", "Attendance"}, 0) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
 
-        DefaultTableModel newModel = new DefaultTableModel(new Object[]{"Name", "Course", "Subject", "Date", "Attendance"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false; // Make cells non-editable for viewing
+            while (rs.next()) {
+                String name = rs.getString("name");
+                String course = rs.getString("course");
+                String subject = rs.getString("subject");
+                Date date = rs.getDate("date");
+                String attendance = rs.getString("attendance");
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String formattedDate = sdf.format(date);
+
+                newModel.addRow(new Object[]{name, course, subject, formattedDate, attendance});
             }
-        };
 
-        while (rs.next()) {
-            String name = rs.getString("name");
-            String course = rs.getString("course");
-            String subject = rs.getString("subject");
-            Date date = rs.getDate("date");
-            String attendance = rs.getString("attendance");
+            table.setModel(newModel);
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String formattedDate = sdf.format(date);
-
-            newModel.addRow(new Object[]{name, course, subject, formattedDate, attendance});
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(attendanceFrame, "Error fetching records: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
         }
-
-        table.setModel(newModel); // Set the updated model to the JTable
-
-    } catch (SQLException ex) {
-        JOptionPane.showMessageDialog(this, "Error fetching records: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        ex.printStackTrace();
     }
-}
 
-    
-    
-    
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new AttendanceRecord());
+    void setVisible(boolean b) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package srsproject;
 import javax.swing.*;
 import java.awt.event.*;
@@ -7,7 +11,7 @@ import javax.swing.border.*;
 import java.sql.*;
 import java.util.*;
 
-public class Tablegrade extends JFrame implements ActionListener {
+public class Tablegrade implements ActionListener {
     JButton btnReturn, btnEdit, btnAdd, btnDelete;
     JFrame tblGrades;
     JTable table;
@@ -26,7 +30,7 @@ public class Tablegrade extends JFrame implements ActionListener {
         tblGrades.setSize(1500, 1000);
         tblGrades.setTitle("Grades");
         tblGrades.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        tblGrades.setLocationRelativeTo(null);
+        
         tblGrades.setLayout(null);
         
         
@@ -50,7 +54,7 @@ public class Tablegrade extends JFrame implements ActionListener {
         table.getTableHeader().setBackground(new Color(128, 0, 0));
         table.getTableHeader().setForeground(new Color(245, 245, 220));
         table.getTableHeader().setFont(new Font("Arial Black", Font.BOLD, 13));
-        table.setEnabled(false); 
+        //table.setEnabled(false); 
         
         Color tableBorderColor = new Color(128, 0, 0);
         scrollPane.setBorder(new LineBorder(tableBorderColor, 8));
@@ -70,12 +74,12 @@ public class Tablegrade extends JFrame implements ActionListener {
         btnReturn.setForeground(new Color(128, 0, 0));
         btnReturn.addActionListener(this);
         
-//        btnEdit = new JButton("EDIT");
-//        btnEdit.setBounds(350, 675, 200, 50);
-//        btnEdit.setFont(new Font("Arial Black", Font.BOLD, 13));
-//        btnEdit.setBackground(new Color(245, 245, 220));
-//        btnEdit.setForeground(new Color(128, 0, 0));
-//        btnEdit.addActionListener(this);
+       btnEdit = new JButton("EDIT");
+       btnEdit.setBounds(350, 675, 200, 50);
+       btnEdit.setFont(new Font("Arial Black", Font.BOLD, 13));
+       btnEdit.setBackground(new Color(245, 245, 220));
+       btnEdit.setForeground(new Color(128, 0, 0));
+       btnEdit.addActionListener(this);
         
         btnAdd = new JButton("ADD");
         btnAdd.setBounds(100, 675, 200, 50);
@@ -92,7 +96,7 @@ public class Tablegrade extends JFrame implements ActionListener {
         btnDelete.addActionListener(this);
         
         JLabel background = new JLabel();
-        ImageIcon bckgrndPic = new ImageIcon("BACKGROUND.jpg");
+        ImageIcon bckgrndPic = new ImageIcon("folderimage/sbBinan.jpg");
         background.setIcon(bckgrndPic);
         background.setSize(1500, 1000);
         
@@ -105,7 +109,7 @@ public class Tablegrade extends JFrame implements ActionListener {
         tblGrades.add(lblHeader);
         tblGrades.add(headerPanel);
         tblGrades.add(background);
-        //tblGrades.setVisible(true);
+        tblGrades.setVisible(true);
 
     }
    
@@ -170,7 +174,7 @@ public class Tablegrade extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e){
         if(e.getSource() == btnAdd){
-        Addgrades g = new Addgrades();
+        Addgrade g = new Addgrade();
         }
         else if (e.getSource() == btnDelete){
             int selectedRow = table.getSelectedRow();
@@ -181,6 +185,13 @@ public class Tablegrade extends JFrame implements ActionListener {
                     
                 }
         }
+        else if(e.getSource() == btnReturn){
+        Dashboard g = new Dashboard();
+        }
+    }
+
+    void setVisible(boolean b) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }
