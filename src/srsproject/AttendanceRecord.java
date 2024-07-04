@@ -56,7 +56,6 @@ public class AttendanceRecord implements ActionListener {
         headerLabel.setPreferredSize(new Dimension(720, 100));
         headerLabel.setForeground(Color.WHITE);
         headerLabel.setFont(new Font("Arial", Font.BOLD, 38));
-        headerLabel.setForeground(new Color(245, 245, 220));
         headerPanel.add(headerLabel);
 
                 model = new DefaultTableModel(new Object[]{"Name", "Course", "Subject", "Date", "Attendance"}, 0) {
@@ -201,7 +200,7 @@ public class AttendanceRecord implements ActionListener {
         }else if (e.getSource() == deleteButton) {
             deleteRecord();
         }else if (e.getSource() == backButton) {
-            new Dashboard();
+            Dashboard db = new Dashboard(); 
         }
     }
     
@@ -371,6 +370,8 @@ private boolean checkEmptyFields() {
         JOptionPane.showMessageDialog(attendanceFrame, "No record selected for deletion.", "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
+
+
 
  
 }

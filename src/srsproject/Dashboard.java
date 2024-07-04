@@ -10,25 +10,20 @@ import javax.swing.ImageIcon;
 
 public class Dashboard implements ActionListener {
         JFrame frame;
-        JPanel headerPanel;
-        JLabel headerLabel;
-        JButton button1, button2, button3, button4, logoutButton;
-        Image background;
-        ImageIcon bgImage;
-        ImageIcon bckgrnd;
-        JPanel panelBG;
-        JLabel imageLabel;
-        
+        JPanel headerPanel, panelBG, menuPanel;
+        JLabel headerLabel, imageLabel, menuLbl, profileIconLabel, helloLbl, wlcmLbl;
+        JButton studinfoBTN, gradesBTN, attendanceBTN,  logoutButton;
+        Image background, Image;
+        ImageIcon bgImage, bckgrnd, profileIcon, newProfileIcon;
+
         
     public Dashboard () {
         frame = new JFrame();
         frame.setTitle("Dashboard Menu");
         frame.setSize(1500, 1000);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(null);
         
-
-    
-
 
         headerPanel = new JPanel();
         headerPanel.setBackground(new Color(128, 0, 0));   
@@ -40,54 +35,107 @@ public class Dashboard implements ActionListener {
         headerLabel.setPreferredSize(new Dimension(720, 100)); 
         headerLabel.setForeground(Color.WHITE);
         headerLabel.setFont(new Font("Arial", Font.BOLD, 38));
-        headerLabel.setForeground(new Color(245, 245, 220));
         headerPanel.add(headerLabel);
+        
+        
+    menuPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Dimension arcs = new Dimension(70, 70);
+                int width = getWidth();
+                int height = getHeight();
+                Graphics2D graphics = (Graphics2D) g;
+                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-  
+                
+                graphics.setColor(new Color(128, 0, 0, 150));
+                graphics.fillRoundRect(0, 0, width - 1, height - 1, arcs.width, arcs.height); 
+                graphics.setColor(new Color(128, 0, 0));
+                graphics.drawRoundRect(0, 0, width - 1, height - 1, arcs.width, arcs.height); 
+            }
+        };
+        menuPanel.setBounds(50, 145, 600, 600);
+        menuPanel.setOpaque(false);
+        menuPanel.setLayout(null);
+
+
+        profileIcon = new ImageIcon("folderimage/ProfileIcon.png");
+        Image = profileIcon.getImage().getScaledInstance(160, 160, Image.SCALE_SMOOTH); 
+        newProfileIcon = new ImageIcon(Image);
+
+        
+        profileIconLabel = new JLabel(newProfileIcon);
+        profileIconLabel.setBounds(220, 110, 160, 160);
+        menuPanel.add(profileIconLabel);
+        
+        
+        
+        
+       helloLbl = new JLabel("HELLO ADMIN!");
+       helloLbl.setBounds(115, 240, 400, 160);
+       helloLbl.setForeground(Color.WHITE);
+       helloLbl.setFont(new Font("Arial", Font.BOLD, 50));
+       menuPanel.add(helloLbl);
+       
+       wlcmLbl = new JLabel("WELCOME TO BSIT STUDENT RECORD SYSTEM");
+       wlcmLbl.setBounds(65, 290, 600, 160);
+       wlcmLbl.setForeground(Color.WHITE);
+       wlcmLbl.setFont(new Font("Arial", Font.BOLD, 20));
+       menuPanel.add(wlcmLbl);
+       
+       
         
 
-        button1 = new JButton("Student Information");
-        button1.setFont(new Font("Arial Black", Font.BOLD, 28));
-        button1.setForeground(new Color(245, 245, 220));
-        button1.setBackground(new Color(128, 0, 0));      
-        button1.setOpaque(true);
-        button1.setBorder(null);
-        button1.setBounds(60, 135, 780, 150);
-        button1.addActionListener(this);
+       
+        
+
+        studinfoBTN = new JButton("Student Information");
+        studinfoBTN.setFont(new Font("Arial Black", Font.BOLD, 28));
+        studinfoBTN.setForeground(new Color(245, 245, 220));
+        studinfoBTN.setBackground(new Color(128, 0, 0));      
+        studinfoBTN.setOpaque(true);
+        studinfoBTN.setBorder(null);
+        studinfoBTN.setBounds(690, 230, 700, 130);
+        studinfoBTN.addActionListener(this);
  
   
 
-        button2 = new JButton("Student Grades");
-        button2.setFont(new Font("Arial Black", Font.BOLD, 28));
-        button2.setForeground(new Color(245, 245, 220));
-        button2.setBackground(new Color(128, 0, 0));
-        button2.setOpaque(true);
-        button2.setBorder(null);
-        button2.setBounds(60, 295, 780, 150); 
-        button2.addActionListener(this);
+        gradesBTN = new JButton("Student Grades");
+        gradesBTN.setFont(new Font("Arial Black", Font.BOLD, 28));
+        gradesBTN.setForeground(new Color(245, 245, 220));
+        gradesBTN.setBackground(new Color(128, 0, 0));
+        gradesBTN.setOpaque(true);
+        gradesBTN.setBorder(null);
+        gradesBTN.setBounds(690, 380, 700, 130); 
+        gradesBTN.addActionListener(this);
 
         
 
-        button3 = new JButton("Attendance Record");
-        button3.setFont(new Font("Arial Black", Font.BOLD, 28));
-        button3.setForeground(new Color(245, 245, 220));
-        button3.setBackground(new Color(128, 0, 0));
-        button3.setOpaque(true);
-        button3.setBorder(null);
-        button3.setBounds(60, 455, 780, 150);
-        button3.addActionListener(this);
+        attendanceBTN = new JButton("Attendance Record");
+        attendanceBTN.setFont(new Font("Arial Black", Font.BOLD, 28));
+        attendanceBTN.setForeground(new Color(245, 245, 220));
+        attendanceBTN.setBackground(new Color(128, 0, 0));
+        attendanceBTN.setOpaque(true);
+        attendanceBTN.setBorder(null);
+        attendanceBTN.setBounds(690, 530, 700, 130);
+        attendanceBTN.addActionListener(this);
 
         
         logoutButton = new JButton("Logout");
         logoutButton.setFont(new Font("Arial Black", Font.BOLD, 15));
-        logoutButton.setForeground(new Color(245, 245, 220));
-        logoutButton.setBackground(new Color(128, 0, 0));
-        logoutButton.setOpaque(true);
-        logoutButton.setBorder(null);
-        logoutButton.setBounds(1080, 680, 300, 70);
+        logoutButton.setForeground(new Color(128, 0, 0));
+        logoutButton.setBackground(Color.WHITE);
+        logoutButton.setBounds(240, 580, 220, 50);
         logoutButton.addActionListener(this);
 
 
+        
+     
+        
+        
+        
+        
 
         bgImage = new ImageIcon("folderimage/sbBinan.jpg");
         background = bgImage.getImage().getScaledInstance(1500, 1000, Image.SCALE_SMOOTH);
@@ -104,15 +152,16 @@ public class Dashboard implements ActionListener {
         
 
         frame.add(headerPanel);
-        frame.add(button1);
-        frame.add(button2);
-        frame.add(button3);
+        frame.add(studinfoBTN);
+        frame.add(gradesBTN);
+        frame.add(attendanceBTN);
         frame.add(logoutButton);
+        frame.add(menuPanel);
+        
         frame.add(panelBG);
  
         
-        //frame.setLocationRelativeTo(null);
-        //frame.pack();
+        
         frame.setVisible(true);
     }
 
@@ -124,15 +173,15 @@ public class Dashboard implements ActionListener {
             frame.dispose(); 
             UserLogin ul = new UserLogin();
             
-        } else if (e.getSource() == button1) {
+        } else if (e.getSource() == studinfoBTN) {
             frame.dispose(); 
             StudentInformation si = new StudentInformation();
             
-        } else if (e.getSource() == button2) {
+        } else if (e.getSource() == gradesBTN) {
             frame.dispose(); 
             Tablegrade tb = new Tablegrade();
             
-        } else if (e.getSource() == button3) {
+        } else if (e.getSource() == attendanceBTN) {
             frame.dispose(); 
             AttendanceRecord ar = new AttendanceRecord();
             
@@ -140,8 +189,7 @@ public class Dashboard implements ActionListener {
     }
 
        
-        
-        
+  
 
 
 }
