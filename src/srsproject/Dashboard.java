@@ -189,7 +189,9 @@ public class Dashboard implements ActionListener {
     }
 
        
-  
+ public static void main(String[] args) {
+     Dashboard db = new Dashboard();
+ }
 
 
 }

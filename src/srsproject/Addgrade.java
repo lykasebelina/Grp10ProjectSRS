@@ -30,11 +30,14 @@ public class Addgrade implements ActionListener {
         grades.setSize(1500,1000);
         grades.setTitle("GRADES RECORD");
         grades.setLocationRelativeTo(null);
-        grades.setLayout(null);
+        
+        
+        
         
         headerPanel = new JPanel();
         headerPanel.setBackground(new Color(128, 0, 0));   
         headerPanel.setBounds(0, 0, 1500, 100);
+
         
         
         JLabel lblHeader = new JLabel("BSIT STUDENT RECORD SYSTEM");
@@ -119,6 +122,19 @@ public class Addgrade implements ActionListener {
         btnReturn.addActionListener(this);
         
         
+        
+        bckgrndPic = new ImageIcon("folderimage/sbBinan.jpg");
+        backgroundPic = bckgrndPic.getImage().getScaledInstance(1500, 1000, Image.SCALE_SMOOTH);
+        bckgrnd = new ImageIcon(backgroundPic);
+       
+        background = new JLabel(bckgrnd);
+        
+        panelBG = new JPanel();
+        panelBG.setBounds(0,-10,1500,1000);
+        panelBG.add(background);
+        
+        
+        
         grades.add(lblHeader);
         grades.add(lblHeader2);
         grades.add(lblName);
@@ -138,25 +154,18 @@ public class Addgrade implements ActionListener {
         grades.add(lblSub7);
         grades.add(txtinte);
         grades.add(lblSub8);
+        grades.add(panelBG);
         grades.add(txtpathfit);
         grades.add(btnSave);
         grades.add(btnReturn);
         grades.add(headerPanel);
+        grades.add(panelBG);
+        
 
         grades.setLayout(null);
         grades.setVisible(true);
         
         
-        backgroundPic = bckgrndPic.getImage().getScaledInstance(1500, 1000, Image.SCALE_SMOOTH);
-        bckgrnd = new ImageIcon(backgroundPic);
-       
-        background = new JLabel(bckgrnd);
-        
-        panelBG = new JPanel();
-        panelBG.setBounds(0,-10,1500,1000);
-        panelBG.add(background);
-        
-        grades.add(panelBG);
         
         
         
@@ -224,4 +233,5 @@ public class Addgrade implements ActionListener {
         }
     } 
   
-}
+  
+ }
