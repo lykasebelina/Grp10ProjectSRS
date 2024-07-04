@@ -174,7 +174,7 @@ public class Addgrade implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e){
         if(e.getSource() == btnReturn){
-            grades.dispose();
+            
             Tablegrade tbl = new Tablegrade();
         }
         
@@ -232,6 +232,7 @@ public class Addgrade implements ActionListener {
             }
         }
     } 
-  
-  
+    public static void main(String[] args) {
+  Addgrade fg = new Addgrade();
  }
+}
