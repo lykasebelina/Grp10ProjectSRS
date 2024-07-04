@@ -232,7 +232,5 @@ public class Addgrade implements ActionListener {
             }
         }
     } 
-    public static void main(String[] args) {
-  Addgrade fg = new Addgrade();
- }
+
 }
