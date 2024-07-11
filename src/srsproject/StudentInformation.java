@@ -21,6 +21,7 @@ public class StudentInformation implements ActionListener {
     private JButton backButton;
     private JButton viewButton;
     private JButton submitButton;
+    private JButton updateButton;
     private JTextField searchBar;
     private ImageIcon bg;
     private Image imageSize;
@@ -29,9 +30,9 @@ public class StudentInformation implements ActionListener {
     private JLabel imageLabel;
 
     private Connection conn;
-    private String dbUrl = "jdbc:mysql://localhost:3306/user_login";
+    private String dbUrl = "jdbc:mysql://localhost:3306/studrec_mgmt";
     private String dbUser = "root";
-    private String dbPassword = "rootmjv_root16";
+    private String dbPassword = "";
 
     public StudentInformation() {
         studentInformationFrame = new JFrame();
@@ -58,7 +59,7 @@ public class StudentInformation implements ActionListener {
         headerLabel.setForeground(new Color(245, 245, 220));
         headerPanel.add(headerLabel);
 
-        model = new DefaultTableModel(new Object[]{"Student ID", "Name", "Course", "Age", "Gender", "Contact Number", "Email"}, 0);
+        model = new DefaultTableModel(new Object[]{"Student ID", "Name", "Course", "Age", "Gender", "Contact Number", "Address", "Email"}, 0);
         table = new JTable(model);
         table.setOpaque(false);
         table.setBackground(new Color(245, 245, 220));
@@ -126,6 +127,15 @@ public class StudentInformation implements ActionListener {
         submitButton.setBorder(null);
         submitButton.setBounds(710, 680, 200, 50);
         submitButton.addActionListener(this);
+        
+        updateButton = new JButton("Update Records");
+        updateButton.setFont(new Font("Arial Black", Font.BOLD, 13));
+        updateButton.setForeground(new Color(128, 0, 0));
+        updateButton.setBackground(new Color(245, 245, 220));
+        updateButton.setOpaque(true);
+        updateButton.setBorder(null);
+        updateButton.setBounds(930, 680, 200, 50);
+        updateButton.addActionListener(this);
 
         bg = new ImageIcon("folderimage/sbBinan.jpg");
         imageSize = bg.getImage().getScaledInstance(1500, 1000, Image.SCALE_SMOOTH);
@@ -144,6 +154,7 @@ public class StudentInformation implements ActionListener {
         studentInformationFrame.add(backButton);
         studentInformationFrame.add(viewButton);
         studentInformationFrame.add(submitButton);
+        studentInformationFrame.add(updateButton);
         studentInformationFrame.add(searchBar);
         studentInformationFrame.add(panelImage);
 
@@ -161,7 +172,7 @@ public class StudentInformation implements ActionListener {
 
     private void loadData() {
         try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT * FROM student_information")) {
+             ResultSet rs = stmt.executeQuery("SELECT * FROM student_info")) {
             while (rs.next()) {
                 model.addRow(new Object[]{
                         rs.getString("student_id"),
@@ -170,6 +181,7 @@ public class StudentInformation implements ActionListener {
                         rs.getString("age"),
                         rs.getString("gender"),
                         rs.getString("contact_number"),
+                        rs.getString("address"),
                         rs.getString("email")
                 });
             }
@@ -178,8 +190,8 @@ public class StudentInformation implements ActionListener {
         }
     }
 
-    private void addRowToDatabase(String student_id, String name, String course, String age, String gender, String contactNumber, String email) {
-        String query = "INSERT INTO student_information (student_id, name, course, age, gender, contact_number, email) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private void addRowToDatabase(String student_id, String name, String course, String age, String gender, String contactNumber,String address, String email) {
+        String query = "INSERT INTO student_info (student_id, name, course, age, gender, contact_number,address, email) VALUES (?, ?, ?, ?, ?, ?,?, ?)";
         try (PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, student_id);
             pstmt.setString(2, name);
@@ -187,7 +199,8 @@ public class StudentInformation implements ActionListener {
             pstmt.setString(4, age);
             pstmt.setString(5, gender);
             pstmt.setString(6, contactNumber);
-            pstmt.setString(7, email);
+            pstmt.setString(7, address);
+            pstmt.setString(8, email);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -196,7 +209,7 @@ public class StudentInformation implements ActionListener {
 
     private void searchInDatabase(String keyword) {
         model.setRowCount(0);
-        String query = "SELECT * FROM student_information WHERE name LIKE ? OR student_id LIKE ?";
+        String query = "SELECT * FROM student_info WHERE name LIKE ? OR student_id LIKE ?";
         try (PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, "%" + keyword + "%");
             pstmt.setString(2, "%" + keyword + "%");
@@ -209,6 +222,7 @@ public class StudentInformation implements ActionListener {
                         rs.getString("age"),
                         rs.getString("gender"),
                         rs.getString("contact_number"),
+                        rs.getString("address"),
                         rs.getString("email")
                 });
             }
@@ -218,7 +232,7 @@ public class StudentInformation implements ActionListener {
     }
 
     private void addRow() {
-        model.addRow(new Object[]{"", "", "BSIT 2-1", "", "Set Gender", "", ""});
+        model.addRow(new Object[]{"", "", "BSIT 2-1", "", "Set Gender", "", "", ""});
     }
 
     private void viewData() {
@@ -227,7 +241,7 @@ public class StudentInformation implements ActionListener {
     }
 
     private void deleteRowFromDatabase(String studentId) {
-        String query = "DELETE FROM student_information WHERE student_id = ?";
+        String query = "DELETE FROM student_info WHERE student_id = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, studentId);
             pstmt.executeUpdate();
@@ -235,21 +249,83 @@ public class StudentInformation implements ActionListener {
             e.printStackTrace();
         }
     }
+    
+    
 
-    private void submitData() {
-        int rowCount = model.getRowCount();
-        for (int i = 0; i < rowCount; i++) {
-            String student_id = (String) model.getValueAt(i, 0);
-            String name = (String) model.getValueAt(i, 1);
-            String course = (String) model.getValueAt(i, 2);
-            String age = (String) model.getValueAt(i, 3);
-            String gender = (String) model.getValueAt(i, 4);
-            String contactNumber = (String) model.getValueAt(i, 5);
-            String email = (String) model.getValueAt(i, 6);
-            addRowToDatabase(student_id, name, course, age, gender, contactNumber, email);
-        }
+private void submitData() {
+    int rowCount = model.getRowCount();
+    for (int i = 0; i < rowCount; i++) {
+        String student_id = (String) model.getValueAt(i, 0);
+        String name = (String) model.getValueAt(i, 1);
+        String course = (String) model.getValueAt(i, 2);
+        String age = (String) model.getValueAt(i, 3);
+        String gender = (String) model.getValueAt(i, 4);
+        String contactNumber = (String) model.getValueAt(i, 5);
+        String address = (String) model.getValueAt(i, 6);
+        String email = (String) model.getValueAt(i, 7);
+
+        // Check if student_id already exists in database
+        if (!isStudentIdExists(student_id)) {
+            addRowToDatabase(student_id, name, course, age, gender, contactNumber, address, email);
+        } 
     }
+}
 
+
+
+    
+    private boolean isStudentIdExists(String student_id) {
+    String query = "SELECT * FROM student_info WHERE student_id = ?";
+    try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+        pstmt.setString(1, student_id);
+        try (ResultSet rs = pstmt.executeQuery()) {
+            return rs.next(); // true if student_id exists, false otherwise
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+    
+    
+    
+    private void updateData() {
+    int rowCount = model.getRowCount();
+    for (int i = 0; i < rowCount; i++) {
+        String student_id = (String) model.getValueAt(i, 0);
+        String name = (String) model.getValueAt(i, 1);
+        String course = (String) model.getValueAt(i, 2);
+        String age = (String) model.getValueAt(i, 3);
+        String gender = (String) model.getValueAt(i, 4);
+        String contactNumber = (String) model.getValueAt(i, 5);
+        String address = (String) model.getValueAt(i, 6);
+        String email = (String) model.getValueAt(i, 7);
+
+        // Update data in database
+        updateRowInDatabase(student_id, name, course, age, gender, contactNumber, address, email);
+    }
+}
+
+private void updateRowInDatabase(String student_id, String name, String course, String age, String gender, String contactNumber, String address, String email) {
+    String query = "UPDATE student_info SET name = ?, course = ?, age = ?, gender = ?, contact_number = ?, address = ?, email = ? WHERE student_id = ?";
+    try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+        pstmt.setString(1, name);
+        pstmt.setString(2, course);
+        pstmt.setString(3, age);
+        pstmt.setString(4, gender);
+        pstmt.setString(5, contactNumber);
+        pstmt.setString(6, address);
+        pstmt.setString(7, email);
+        pstmt.setString(8, student_id);
+        pstmt.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+    
+    
+    
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backButton) {
@@ -271,11 +347,18 @@ public class StudentInformation implements ActionListener {
         } else if (e.getSource() == submitButton) {
             submitData();
             JOptionPane.showMessageDialog(studentInformationFrame, "Data submitted successfully");
+            
+            } else if (e.getSource() == updateButton) {
+            updateData();
+            JOptionPane.showMessageDialog(studentInformationFrame, "Data updated successfully");
+            
         } else if (e.getSource() == searchBar) {
             String keyword = searchBar.getText().trim();
             searchInDatabase(keyword);
         }
     }
 
-    
+     public static void main(String[] args) {
+        StudentInformation db = new StudentInformation();
+ }
 }
