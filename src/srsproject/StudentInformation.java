@@ -30,9 +30,9 @@ public class StudentInformation implements ActionListener {
     private JLabel imageLabel;
 
     private Connection conn;
-    private String dbUrl = "jdbc:mysql://localhost:3306/studrec_mgmt";
+    private String dbUrl = "jdbc:mysql://localhost:3306/user_login";
     private String dbUser = "root";
-    private String dbPassword = "";
+    private String dbPassword = "rootmjv_root16";
 
     public StudentInformation() {
         studentInformationFrame = new JFrame();
@@ -358,7 +358,4 @@ private void updateRowInDatabase(String student_id, String name, String course, 
         }
     }
 
-     public static void main(String[] args) {
-        StudentInformation db = new StudentInformation();
- }
 }

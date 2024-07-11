@@ -123,7 +123,7 @@ public class UserLogin implements ActionListener {
                 String dbPassword = "rootmjv_root16";
 
                 try (Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword)) {
-                    String query = "SELECT * FROM login WHERE user_email = ? AND user_password = ?";
+                    String query = "SELECT * FROM user_access WHERE user_email = ? AND user_password = ?";
                     PreparedStatement preparedStatement = conn.prepareStatement(query);
                     preparedStatement.setString(1, emailtxt);
                     preparedStatement.setString(2, passwordtxt);

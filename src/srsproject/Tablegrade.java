@@ -33,9 +33,9 @@ public class Tablegrade implements ActionListener {
     private int selectedRow = -1;
 
     Connection conn;
-    String dbUrl = "jdbc:mysql://localhost:3306/studrec_mgmt";
+    String dbUrl = "jdbc:mysql://localhost:3306/user_login";
     String dbUser = "root";
-    String dbPassword ="";
+    String dbPassword ="rootmjv_root16";
 
     public Tablegrade() {
         gradeFrame = new JFrame();
@@ -220,6 +220,7 @@ table.addMouseListener(new MouseAdapter() {
         }else if (e.getSource() == updateButton) {
             updateData();
         }else if (e.getSource() == backButton) {
+            gradeFrame.dispose();
             Dashboard db = new Dashboard(); 
         }
         else if (e.getSource() == computeButton) {
@@ -507,14 +508,5 @@ private double parseGrade(String grade) {
         return 0.0;
     }
 }
-
-
-
-
-    
-
-  public static void main(String[] args) {
-     Tablegrade db = new Tablegrade();
- }
  
 }

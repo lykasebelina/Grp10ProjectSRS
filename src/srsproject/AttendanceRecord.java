@@ -26,9 +26,9 @@ public class AttendanceRecord implements ActionListener {
     private int selectedRow = -1;
 
     Connection conn;
-    String dbUrl = "jdbc:mysql://localhost:3306/studrec_mgmt";
+    String dbUrl = "jdbc:mysql://localhost:3306/user_login";
     String dbUser = "root";
-    String dbPassword = "";
+    String dbPassword = "rootmjv_root16";
 
     public AttendanceRecord() {
         attendanceFrame = new JFrame();
@@ -191,6 +191,7 @@ public class AttendanceRecord implements ActionListener {
         } else if (e.getSource() == refreshButton) {
                   refreshData();
         } else if (e.getSource() == backButton) {
+            attendanceFrame.dispose();
             Dashboard db = new Dashboard();
         }else if (e.getSource() == deleteButton) {
         deleteRecord();
@@ -432,12 +433,4 @@ private void searchRecord() {
     }
 }
 
-
-
-
-
-    
-    public static void main(String[] args) {
-        AttendanceRecord db = new AttendanceRecord();
-    }
 }
