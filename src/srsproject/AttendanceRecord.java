@@ -52,7 +52,7 @@ public class AttendanceRecord implements ActionListener {
         model = new DefaultTableModel(new Object[]{"Student ID", "Name", "Course", "Subject", "Date", "Attendance"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                // Allow editing for Subject (index 3), Date (index 4), and Attendance (index 5) columns
+              
                 return column == 3 || column == 4 || column == 5;
             }
         };
@@ -193,23 +193,13 @@ public class AttendanceRecord implements ActionListener {
         } else if (e.getSource() == backButton) {
             Dashboard db = new Dashboard();
         }else if (e.getSource() == deleteButton) {
-        int selectedRow = table.getSelectedRow();
-        if (selectedRow != -1) {
-            // Get student_id from the selected row
-            String studentId = (String) model.getValueAt(selectedRow, 0);
-            // Call method to delete the record based on student_id
-            deleteRecord(studentId);
-        } else {
-            // Show warning if no row is selected
-            JOptionPane.showMessageDialog(attendanceFrame, "No row selected.", "Warning", JOptionPane.WARNING_MESSAGE);
+        deleteRecord();
         }
     }
-    // Handle other action events here...
-}
     
     private void refreshData() {
     try {
-        model.setRowCount(0); // Clear the table before adding new data
+        model.setRowCount(0); 
 
         String query = "SELECT si.student_id, si.name, si.course, ar.subject, ar.date, ar.attendance_status " +
                        "FROM student_info si " +
@@ -228,7 +218,7 @@ public class AttendanceRecord implements ActionListener {
             String date = rs.getString("date");
             String attendanceStatus = rs.getString("attendance_status");
 
-            // Check if any field is null or empty before adding to model
+            
             if (studentId != null && name != null && course != null && subject != null && date != null && attendanceStatus != null &&
                 !studentId.isEmpty() && !name.isEmpty() && !course.isEmpty() && !subject.isEmpty() && !date.isEmpty() && !attendanceStatus.isEmpty()) {
                 model.addRow(new Object[]{studentId, name, course, subject, date, attendanceStatus});
@@ -272,49 +262,56 @@ public class AttendanceRecord implements ActionListener {
         }
     }
 
-    private void saveRecords() {
-        if (selectedRow != -1) {
-        
+   private void saveRecords() {
+    int rowCount = model.getRowCount();
+    boolean recordSaved = false;
+    
+    if (rowCount > 0) {
         try {
-            String studentId = (String) model.getValueAt(selectedRow, 0);
-            String subject = (String) model.getValueAt(selectedRow, 3);
-            String date = (String) model.getValueAt(selectedRow, 4);
-            String attendance_status = (String) model.getValueAt(selectedRow, 5);
-            
+            for (int i = 0; i < rowCount; i++) {
+                String studentId = (String) model.getValueAt(i, 0);
+                String subject = (String) model.getValueAt(i, 3);
+                String date = (String) model.getValueAt(i, 4);
+                String attendanceStatus = (String) model.getValueAt(i, 5);
 
-            // Check if student_id already exists in grade_system table
-            String checkQuery = "SELECT * FROM attendance_record WHERE student_id = ?";
-            PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
-            checkStmt.setString(1, studentId);
-            ResultSet rs = checkStmt.executeQuery();
+                if (subject != null && !subject.isEmpty() && date != null && !date.isEmpty() && attendanceStatus != null && !attendanceStatus.isEmpty()) {
+                    String checkQuery = "SELECT * FROM attendance_record WHERE student_id = ? AND subject = ? AND date = ?";
+                    PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
+                    checkStmt.setString(1, studentId);
+                    checkStmt.setString(2, subject);
+                    checkStmt.setString(3, date);
+                    ResultSet rs = checkStmt.executeQuery();
 
-            if (rs.next()) {
-                // Student record already exists, show error message
-                JOptionPane.showMessageDialog(attendanceFrame, "Please click on 'Update Records' to save changes.", "Error", JOptionPane.ERROR_MESSAGE);
-            } else {
-                // Insert new record
-                String insertQuery = "INSERT INTO attendance_record (student_id, subject, date, attendance_status) " +
-                                     "VALUES (?, ?, ?, ?)";
-                PreparedStatement insertStmt = conn.prepareStatement(insertQuery);
-                insertStmt.setString(1, studentId);
-                insertStmt.setString(2, subject);
-                insertStmt.setString(3, date);
-                insertStmt.setString(4, attendance_status); 
+                    if (!rs.next()) {
+                        String insertQuery = "INSERT INTO attendance_record (student_id, subject, date, attendance_status) " +
+                                             "VALUES (?, ?, ?, ?)";
+                        PreparedStatement insertStmt = conn.prepareStatement(insertQuery);
+                        insertStmt.setString(1, studentId);
+                        insertStmt.setString(2, subject);
+                        insertStmt.setString(3, date);
+                        insertStmt.setString(4, attendanceStatus);
+                        insertStmt.executeUpdate();
+                        insertStmt.close();
 
-                insertStmt.executeUpdate();
-                insertStmt.close();
+                        recordSaved = true;
+                    }
 
-                JOptionPane.showMessageDialog(attendanceFrame, "Record saved successfully!");
+                    checkStmt.close();
+                    rs.close();
+                }
             }
 
-            checkStmt.close();
-            rs.close();
+            if (recordSaved) {
+                JOptionPane.showMessageDialog(attendanceFrame, "Records saved successfully!");
+            } else {
+                JOptionPane.showMessageDialog(attendanceFrame, "No new records to save or no rows selected.");
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(attendanceFrame, "Failed to save record.");
+            JOptionPane.showMessageDialog(attendanceFrame, "Failed to save records.");
         }
     } else {
-        JOptionPane.showMessageDialog(attendanceFrame, "No row selected.");
+        JOptionPane.showMessageDialog(attendanceFrame, "No rows selected.");
     }
 }
 
@@ -323,7 +320,7 @@ public class AttendanceRecord implements ActionListener {
 
     private void loadData() {
     try {
-        model.setRowCount(0); // Clear the table before adding new data
+        model.setRowCount(0); 
 
         String query = "SELECT si.student_id, si.name, si.course, ar.subject, ar.date, ar.attendance_status " +
                        "FROM student_info si " +
@@ -359,9 +356,9 @@ private void searchRecord() {
     String searchText = searchBar.getText().trim();
     
     try {
-        model.setRowCount(0); // Clear existing table data
+        model.setRowCount(0);
         
-        // SQL query to fetch complete records based on search criteria
+       
         String query = "SELECT si.student_id, si.name, si.course, ar.subject, ar.date, ar.attendance_status " +
                        "FROM student_info si LEFT JOIN attendance_record ar ON si.student_id = ar.student_id " +
                        "WHERE (si.student_id LIKE ? OR si.name LIKE ? OR ar.date LIKE ? OR ar.subject LIKE ?) " +
@@ -369,10 +366,10 @@ private void searchRecord() {
                        "AND ar.subject IS NOT NULL AND ar.date IS NOT NULL";
         
         PreparedStatement pstmt = conn.prepareStatement(query);
-        pstmt.setString(1, "%" + searchText + "%"); // Search by student_id
-        pstmt.setString(2, "%" + searchText + "%"); // Search by name
-        pstmt.setString(3, "%" + searchText + "%"); // Search by date
-        pstmt.setString(4, "%" + searchText + "%"); // Search by subject
+        pstmt.setString(1, "%" + searchText + "%"); 
+        pstmt.setString(2, "%" + searchText + "%"); 
+        pstmt.setString(3, "%" + searchText + "%"); 
+        pstmt.setString(4, "%" + searchText + "%"); 
         
         ResultSet rs = pstmt.executeQuery();
 
@@ -384,7 +381,7 @@ private void searchRecord() {
             String date = rs.getString("date");
             String attendanceStatus = rs.getString("attendance_status");
             
-            // Check if any field is null or empty before adding to model
+           
             if (studentId != null && name != null && subject != null && date != null && attendanceStatus != null &&
                 !studentId.isEmpty() && !name.isEmpty() && !subject.isEmpty() && !date.isEmpty() && !attendanceStatus.isEmpty()) {
                 model.addRow(new Object[]{studentId, name, course, subject, date, attendanceStatus});
@@ -402,35 +399,40 @@ private void searchRecord() {
 
 
 
-         private void deleteRecord(String studentId) {
-    // Check if studentId is null or empty
-    if (studentId == null || studentId.isEmpty()) {
-        JOptionPane.showMessageDialog(attendanceFrame, "No row selected.", "Warning", JOptionPane.WARNING_MESSAGE);
-        return;
-    }
+ private void deleteRecord() {
+    if (selectedRow != -1) {
+        try {
+            String studentId = (String) model.getValueAt(selectedRow, 0);
+            String subject = (String) model.getValueAt(selectedRow, 3);
+            String date = (String) model.getValueAt(selectedRow, 4);
 
-    // SQL query to delete record from attendance_record table
-    String query = "DELETE FROM attendance_record WHERE student_id = ?";
-    try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-        // Set student_id parameter
-        pstmt.setString(1, studentId);
-        
-        // Execute delete query
-        int rowsAffected = pstmt.executeUpdate();
+           
+            String deleteQuery = "DELETE FROM attendance_record WHERE student_id = ? AND subject = ? AND date = ?";
+            PreparedStatement deleteStmt = conn.prepareStatement(deleteQuery);
+            deleteStmt.setString(1, studentId);
+            deleteStmt.setString(2, subject);
+            deleteStmt.setString(3, date);
+            int rowsAffected = deleteStmt.executeUpdate();
 
-        // Check if deletion was successful
-        if (rowsAffected > 0) {
-            JOptionPane.showMessageDialog(attendanceFrame, "Record deleted successfully.");
-            // Refresh table after deletion
-            loadData();
-        } else {
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(attendanceFrame, "Record deleted successfully.");
+           
+                loadData();
+            } else {
+                JOptionPane.showMessageDialog(attendanceFrame, "Failed to delete record.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+            deleteStmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(attendanceFrame, "Failed to delete record.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(attendanceFrame, "Failed to delete record.", "Error", JOptionPane.ERROR_MESSAGE);
+    } else {
+        JOptionPane.showMessageDialog(attendanceFrame, "No row selected.", "Warning", JOptionPane.WARNING_MESSAGE);
     }
 }
+
+
 
 
 

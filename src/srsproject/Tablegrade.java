@@ -6,8 +6,6 @@ import java.sql.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import javax.swing.border.LineBorder;
 import javax.swing.table.*;
 
@@ -161,7 +159,7 @@ table.addMouseListener(new MouseAdapter() {
         refreshButton.addActionListener(this);
 
 
-    // Existing code...
+
     
 
         backButton = new JButton("BACK");
@@ -297,18 +295,18 @@ private void loadData() {
     String searchText = searchBar.getText().trim();
     
     try {
-        model.setRowCount(0); // Clear existing table data
+        model.setRowCount(0); 
         
-        // SQL query to fetch records based on search criteria
+    
         String query = "SELECT si.student_id, si.name, si.course, gs.comp090, gs.comp010, gs.comp012, gs.comp013, gs.comp014, gs.elecit_fe2, gs.inte202, gs.pathfit4, gs.gwa " +
                        "FROM student_info si LEFT JOIN grade_system gs ON si.student_id = gs.student_id " +
                        "WHERE si.student_id LIKE ? OR si.name LIKE ? OR si.course LIKE ? OR gs.gwa LIKE ?";
         
         PreparedStatement pstmt = conn.prepareStatement(query);
-        pstmt.setString(1, "%" + searchText + "%"); // Search by student_id
-        pstmt.setString(2, "%" + searchText + "%"); // Search by name
-        pstmt.setString(3, "%" + searchText + "%"); // Search by course
-        pstmt.setString(4, "%" + searchText + "%"); // Search by gwa
+        pstmt.setString(1, "%" + searchText + "%"); 
+        pstmt.setString(2, "%" + searchText + "%");
+        pstmt.setString(3, "%" + searchText + "%"); 
+        pstmt.setString(4, "%" + searchText + "%");
         
         ResultSet rs = pstmt.executeQuery();
 
@@ -340,7 +338,7 @@ private void loadData() {
 
 
 private void saveRecords() {
-    if (selectedRow != -1) { // Check if a row is selected
+    if (selectedRow != -1) { 
         try {
             String studentId = (String) model.getValueAt(selectedRow, 0);
             String comp090 = (String) model.getValueAt(selectedRow, 3);
@@ -353,17 +351,17 @@ private void saveRecords() {
             String pathfit4 = (String) model.getValueAt(selectedRow, 10);
             String gwa = (String) model.getValueAt(selectedRow, 11);
 
-            // Check if student_id already exists in grade_system table
+       
             String checkQuery = "SELECT * FROM grade_system WHERE student_id = ?";
             PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
             checkStmt.setString(1, studentId);
             ResultSet rs = checkStmt.executeQuery();
 
             if (rs.next()) {
-                // Student record already exists, show error message
+              
                 JOptionPane.showMessageDialog(gradeFrame, "Please click on 'Update Records' to save changes.", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
-                // Insert new record
+               
                 String insertQuery = "INSERT INTO grade_system (student_id, comp090, comp010, comp012, comp013, comp014, elecit_fe2, inte202, pathfit4, gwa) " +
                                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement insertStmt = conn.prepareStatement(insertQuery);
@@ -414,7 +412,7 @@ private void saveRecords() {
             String pathfit4 = (String) model.getValueAt(row, 10);
             String gwa = (String) model.getValueAt(row, 11);
 
-            // Fetch original values from the database
+       
             String query = "SELECT comp090, comp010, comp012, comp013, comp014, elecit_fe2, inte202, pathfit4, gwa FROM grade_system WHERE student_id = ?";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1, studentId);
@@ -431,12 +429,12 @@ private void saveRecords() {
                 String originalPathfit4 = rs.getString("pathfit4");
                 String originalGwa = rs.getString("gwa");
 
-                // Compare original values with current values
+            
                 if (!comp090.equals(originalComp090) || !comp010.equals(originalComp010) || !comp012.equals(originalComp012) ||
                     !comp013.equals(originalComp013) || !comp014.equals(originalComp014) || !elecit_fe2.equals(originalElecitFe2) ||
                     !inte202.equals(originalInte202) || !pathfit4.equals(originalPathfit4) || !gwa.equals(originalGwa)) {
                     
-                    // Update record if there are changes
+                 
                     String updateQuery = "UPDATE grade_system SET comp090 = ?, comp010 = ?, comp012 = ?, comp013 = ?, comp014 = ?, elecit_fe2 = ?, inte202 = ?, pathfit4 = ?, gwa = ? WHERE student_id = ?";
                     PreparedStatement updateStmt = conn.prepareStatement(updateQuery);
                     updateStmt.setString(1, comp090);
@@ -477,7 +475,7 @@ private void saveRecords() {
 
 
 private void computeAverage() {
-    if (selectedRow != -1) { // Check if a row is selected
+    if (selectedRow != -1) { 
         double comp090 = parseGrade((String) model.getValueAt(selectedRow, 3));
         double comp010 = parseGrade((String) model.getValueAt(selectedRow, 4));
         double comp012 = parseGrade((String) model.getValueAt(selectedRow, 5));
@@ -487,13 +485,13 @@ private void computeAverage() {
         double inte202 = parseGrade((String) model.getValueAt(selectedRow, 9));
         double pathfit4 = parseGrade((String) model.getValueAt(selectedRow, 10));
 
-        // Compute average
+      
         double average = (comp090 + comp010 + comp012 + comp013 + comp014 + elecit_fe2 + inte202 + pathfit4) / 8.0;
 
-        // Format the average to two decimal places
+      
         String formattedAverage = String.format("%.2f", average);
 
-        // Set the computed average to the GWA column (index 11) of the selected row
+ 
         model.setValueAt(formattedAverage, selectedRow, 11);
     } else {
         JOptionPane.showMessageDialog(gradeFrame, "Please select a row to compute average.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -505,8 +503,8 @@ private double parseGrade(String grade) {
     try {
         return Double.parseDouble(grade);
     } catch (NumberFormatException e) {
-        // Handle invalid input if needed
-        return 0.0; // Default to 0.0 if parsing fails
+       
+        return 0.0;
     }
 }
 

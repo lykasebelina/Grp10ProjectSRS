@@ -264,7 +264,7 @@ private void submitData() {
         String address = (String) model.getValueAt(i, 6);
         String email = (String) model.getValueAt(i, 7);
 
-        // Check if student_id already exists in database
+      
         if (!isStudentIdExists(student_id)) {
             addRowToDatabase(student_id, name, course, age, gender, contactNumber, address, email);
         } 
@@ -279,7 +279,7 @@ private void submitData() {
     try (PreparedStatement pstmt = conn.prepareStatement(query)) {
         pstmt.setString(1, student_id);
         try (ResultSet rs = pstmt.executeQuery()) {
-            return rs.next(); // true if student_id exists, false otherwise
+            return rs.next(); 
         }
     } catch (SQLException e) {
         e.printStackTrace();
@@ -301,7 +301,7 @@ private void submitData() {
         String address = (String) model.getValueAt(i, 6);
         String email = (String) model.getValueAt(i, 7);
 
-        // Update data in database
+      
         updateRowInDatabase(student_id, name, course, age, gender, contactNumber, address, email);
     }
 }

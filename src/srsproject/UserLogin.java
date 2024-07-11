@@ -25,20 +25,19 @@ public class UserLogin implements ActionListener {
     JCheckBox box;
 
     UserLogin() {
-        // creating new frame
+    
         frame = new JFrame();
 
-        // setting the frame size
+     
         frame.setSize(1500, 1000);
 
-        // Frame title
+    
         frame.setTitle("PUPBC Student Record System");
         frame.setLocationRelativeTo(null);
 
-        // using no layout
         frame.setLayout(null);
 
-        // Setting the sizes and fonts
+       
         header = new JPanel();
         header.setBounds(0, 0, 1700, 100);
 
@@ -74,7 +73,7 @@ public class UserLogin implements ActionListener {
         box.setBounds(650, 350, 190, 30);
         box.addActionListener(this);
 
-        // Adding components to the frame and other components
+   
         frame.add(button1);
         frame.add(lemail);
         frame.add(lpassword);
@@ -85,7 +84,7 @@ public class UserLogin implements ActionListener {
         frame.add(header, Integer.valueOf(2));
         header.add(lheader);
 
-        // Setting colors
+    
         frame.getContentPane().setBackground(new Color(255, 239, 213));
         box.setBackground(new Color(255, 239, 213));
         button1.setForeground(new Color(245, 245, 220));
@@ -94,7 +93,7 @@ public class UserLogin implements ActionListener {
         lheader.setForeground(new Color(245, 245, 220));
         lheader.setForeground(Color.WHITE);
 
-        // frame visible
+    
         frame.setVisible(true);
 
     }
